@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OncoTarget AI — 췌장암 KRAS G12R 정밀 신약 발굴 플랫폼</title>
+  
+  <!-- Tailwind CSS with Stitch Design Extensions -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            stitch: {
+              obsidian: '#080c14',
+              surface: '#0f172a',
+              card: '#131e36',
+              border: '#1e293b',
+              hover: '#1e2d4d',
+              accent: '#38bdf8',
+              glow: '#00f0ff',
+              emerald: '#10b981',
+              rose: '#f43f5e',
+              amber: '#f59e0b',
+              purple: '#a855f7'
+            }
+          },
+          boxShadow: {
+            'glow-cyan': '0 0 25px -5px rgba(56, 189, 248, 0.25)',
+            'glow-rose': '0 0 25px -5px rgba(244, 63, 94, 0.25)',
+            'stitch-card': '0 4px 20px -2px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.05)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js for Dose-Response -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    
+    /* Stitch Micro-glow & Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #080c14; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+    .stitch-glass {
+      background: rgba(19, 30, 54, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .stitch-glow-border:hover {
+      border-color: rgba(56, 189, 248, 0.4);
+      box-shadow: 0 0 20px -3px rgba(56, 189, 248, 0.15);
+    }
+  </style>
+</head>
+<body class="bg-stitch-obsidian text-slate-100 min-h-screen antialiased flex flex-col selection:bg-cyan-500/20 selection:text-cyan-300">
+
+  <!-- Top App Navigation Bar (Stitch Design DNA) -->
+  <header class="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand Logo & Context -->
+      <div class="flex items-center gap-4">
+        <a href="index.html" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-600 flex items-center justify-center text-white font-black text-lg shadow-glow-cyan transition-transform group-hover:scale-105">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-extrabold text-base tracking-tight text-white group-hover:text-cyan-300 transition-colors">OncoTarget AI</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">Stitch v2.0</span>
+            </div>
+            <p class="text-[11px] text-slate-400 font-medium">췌장암(PDAC) 정밀 신약 발굴 & 타깃 인텔리전스</p>
+          </div>
+        </a>
+
+        <div class="h-6 w-px bg-slate-800 hidden md:block"></div>
+
+        <!-- Live Connected Model Status -->
+        <div class="hidden lg:flex items-center gap-2 bg-slate-900/60 px-3 py-1.5 rounded-full border border-slate-800 text-xs">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-slate-400">DeepMind Science Skills:</span>
+          <span class="font-mono text-emerald-400 font-bold">AlphaFold 3 + PDB (8CX5, 9BGC)</span>
+        </div>
+      </div>
+
+      <!-- Action & Links -->
+      <div class="flex items-center gap-3">
+        <a href="slides.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700/80 text-xs font-semibold transition-all">
+          <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+          <span>창업 학습 슬라이드</span>
+        </a>
+
+        <button onclick="printReport()" class="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white text-xs font-bold shadow-glow-cyan transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H9v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+          <span>실사 리포트 인쇄/PDF ($5,000)</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Workspace Sub-Header: Active Patient Profile -->
+  <section class="border-b border-slate-800/60 bg-slate-900/40 px-4 sm:px-6 lg:px-8 py-2.5">
+    <div class="max-w-[1600px] mx-auto flex flex-wrap items-center justify-between gap-4 text-xs">
+      <div class="flex items-center gap-3">
+        <span class="text-slate-400 font-medium">활성 타깃 프로젝트:</span>
+        <span class="px-2.5 py-1 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-400 font-mono font-bold flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> KRAS G12R
+        </span>
+        <span class="px-2.5 py-1 rounded-md bg-amber-500/10 border border-amber-500/20 text-amber-400 font-mono font-bold flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> EP300 Loss
+        </span>
+        <span class="px-2.5 py-1 rounded-md bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 font-mono font-bold flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span> SMAD4 Del
+        </span>
+      </div>
+
+      <div class="flex items-center gap-4 text-slate-400">
+        <span>적응증: <strong class="text-white">전이성 췌관선암종 (PDAC)</strong></span>
+        <span class="text-slate-600">|</span>
+        <span>예상 시장성: <strong class="text-emerald-400">$4.2B Global Market</strong></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Dashboard Layout (Stitch Grid) -->
+  <main class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full space-y-6">
+
+    <!-- Stitch Hero Stats Panel -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      
+      <div class="stitch-glass rounded-2xl p-4 relative overflow-hidden stitch-glow-border transition-all">
+        <div class="flex justify-between items-start">
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">주요 타깃 돌연변이</span>
+          <span class="p-1 rounded bg-rose-500/10 text-rose-400 text-xs font-mono font-bold">15-20% PDAC</span>
+        </div>
+        <div class="text-2xl font-black text-rose-400 mt-2 font-mono">KRAS G12R</div>
+        <div class="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
+          <span>구아니디늄(Arg) 양이온 돌출</span>
+        </div>
+      </div>
+
+      <div class="stitch-glass rounded-2xl p-4 relative overflow-hidden stitch-glow-border transition-all">
+        <div class="flex justify-between items-start">
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">공략 모달리티</span>
+          <span class="p-1 rounded bg-cyan-500/10 text-cyan-400 text-xs font-mono font-bold">Multi-Target</span>
+        </div>
+        <div class="text-2xl font-black text-cyan-400 mt-2">5대 전략 병용</div>
+        <div class="text-[11px] text-slate-400 mt-1">공유결합 + 삼중복합체 + 합성치사</div>
+      </div>
+
+      <div class="stitch-glass rounded-2xl p-4 relative overflow-hidden stitch-glow-border transition-all">
+        <div class="flex justify-between items-start">
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">결정 구조 검증</span>
+          <span class="p-1 rounded bg-emerald-500/10 text-emerald-400 text-xs font-mono font-bold">1.85 Å Res</span>
+        </div>
+        <div class="text-2xl font-black text-emerald-400 mt-2 font-mono">PDB: 8CX5</div>
+        <div class="text-[11px] text-slate-400 mt-1">α,β-케토아마이드 공유결합 입증</div>
+      </div>
+
+      <div class="stitch-glass rounded-2xl p-4 relative overflow-hidden stitch-glow-border transition-all">
+        <div class="flex justify-between items-start">
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">병용 시너지 지수 (CI)</span>
+          <span class="p-1 rounded bg-purple-500/10 text-purple-400 text-xs font-mono font-bold">Strong Synergy</span>
+        </div>
+        <div class="text-2xl font-black text-purple-400 mt-2 font-mono">CI = 0.24</div>
+        <div class="text-[11px] text-slate-400 mt-1">단독 투여 대비 약물 농도 75% 감소</div>
+      </div>
+
+    </div>
+
+    <!-- Navigation Tabs (Stitch Style) -->
+    <div class="border-b border-slate-800 flex gap-2">
+      <button onclick="switchTab('tab-3d')" id="btn-tab-3d" class="tab-btn px-4 py-2.5 rounded-t-xl text-xs font-bold text-cyan-400 border-b-2 border-cyan-400 bg-slate-900/60 flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
+        <span>1. 3D 인터랙티브 분자 포켓</span>
+      </button>
+
+      <button onclick="switchTab('tab-network')" id="btn-tab-network" class="tab-btn px-4 py-2.5 rounded-t-xl text-xs font-bold text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+        <span>2. 다중오믹스 합성치사 네트워크</span>
+      </button>
+
+      <button onclick="switchTab('tab-dose')" id="btn-tab-dose" class="tab-btn px-4 py-2.5 rounded-t-xl text-xs font-bold text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+        <span>3. 후보물질 도즈-반응 시뮬레이터</span>
+      </button>
+
+      <button onclick="switchTab('tab-business')" id="btn-tab-business" class="tab-btn px-4 py-2.5 rounded-t-xl text-xs font-bold text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span>4. 1인 유니콘 비즈니스 모델</span>
+      </button>
+    </div>
+
+    <!-- TAB 1: 3D Interactive Molecular Simulation -->
+    <section id="tab-3d" class="tab-pane space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Left: Pocket Control Panel -->
+        <div class="stitch-glass rounded-2xl p-5 space-y-4">
+          <div class="border-b border-slate-800 pb-3">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-cyan-400"></span> 타깃 포켓 선택 & 파라미터
+            </h3>
+            <p class="text-xs text-slate-400 mt-1">원자 단위 3D 결합 좌표 및 결합력 분석</p>
+          </div>
+
+          <div class="space-y-2">
+            <div onclick="setPocket('8CX5')" id="pocket-8CX5" class="pocket-card cursor-pointer p-3.5 rounded-xl border border-cyan-500/50 bg-cyan-950/20 hover:border-cyan-400 transition-all">
+              <div class="flex justify-between items-center">
+                <span class="text-xs font-bold text-white">α,β-Ketoamide (Covalent)</span>
+                <span class="font-mono text-xs text-cyan-400 font-bold">PDB: 8CX5</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1">Arg12 구아니디늄 잔기와 비가역적 공유결합 형성</p>
+            </div>
+
+            <div onclick="setPocket('9BGC')" id="pocket-9BGC" class="pocket-card cursor-pointer p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-slate-700 transition-all">
+              <div class="flex justify-between items-center">
+                <span class="text-xs font-bold text-white">Daraxonrasib CypA Tri-complex</span>
+                <span class="font-mono text-xs text-indigo-400 font-bold">PDB: 9BGC</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1">CypA 면역단백질과 3중 결합을 이뤄 RAF 차폐</p>
+            </div>
+
+            <div onclick="setPocket('PROTAC')" id="pocket-PROTAC" class="pocket-card cursor-pointer p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-slate-700 transition-all">
+              <div class="flex justify-between items-center">
+                <span class="text-xs font-bold text-white">CRBN-KRAS G12R Degrader</span>
+                <span class="font-mono text-xs text-amber-400 font-bold">ChEMBL5483196</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1">유비퀴틴-프로테아솜 청소기로 단백질 완전 분해</p>
+            </div>
+          </div>
+
+          <!-- Dynamic Chemistry Metrics -->
+          <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2.5 text-xs">
+            <div class="flex justify-between text-slate-400">
+              <span>결합 자유에너지 (ΔG):</span>
+              <span id="metric-dg" class="font-mono text-emerald-400 font-bold">-11.8 kcal/mol</span>
+            </div>
+            <div class="flex justify-between text-slate-400">
+              <span>결합 잔기 (Residues):</span>
+              <span id="metric-res" class="font-mono text-slate-200 font-semibold">Arg12, Gln61, Glu62</span>
+            </div>
+            <div class="flex justify-between text-slate-400">
+              <span>야생형(WT) 대비 선택성:</span>
+              <span id="metric-sel" class="font-mono text-cyan-400 font-bold">> 120배 (Arg12 전용)</span>
+            </div>
+            <div class="flex justify-between text-slate-400">
+              <span>수소결합 네트워크:</span>
+              <span id="metric-hb" class="font-mono text-purple-400 font-bold">4 H-bonds formed</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Center: Interactive 3D Canvas -->
+        <div class="lg:col-span-2 stitch-glass rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div>
+              <span id="canvas-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
+                PDB Real Crystal Structure
+              </span>
+              <h3 id="canvas-title" class="text-base font-bold text-white mt-1">KRAS G12R Covalent Binding Pocket (8CX5)</h3>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="resetCanvasRotation()" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-300 transition-colors">
+                시점 초기화
+              </button>
+              <span class="text-xs text-slate-400 font-mono">1.85 Å Resolution</span>
+            </div>
+          </div>
+
+          <!-- 3D Interactive Canvas Simulation -->
+          <div class="relative w-full h-80 my-4 bg-slate-950 rounded-xl border border-slate-800 overflow-hidden flex items-center justify-center cursor-grab active:cursor-grabbing">
+            <canvas id="molCanvas" class="w-full h-full"></canvas>
+            
+            <!-- Overlay Guide -->
+            <div class="absolute bottom-3 left-3 text-[11px] text-slate-400 bg-slate-900/80 px-2.5 py-1 rounded-md backdrop-blur border border-slate-800 flex items-center gap-1.5 pointer-events-none">
+              <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+              <span>마우스 드래그로 3차원 분자 포켓 회전</span>
+            </div>
+          </div>
+
+          <!-- Pocket Legend -->
+          <div class="grid grid-cols-4 gap-2 text-center text-xs">
+            <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800">
+              <div class="flex items-center justify-center gap-1.5 text-rose-400 font-bold">
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Arg12
+              </div>
+              <span class="text-[10px] text-slate-400">구아니디늄 잔기</span>
+            </div>
+            <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800">
+              <div class="flex items-center justify-center gap-1.5 text-cyan-400 font-bold">
+                <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span> Warhead
+              </div>
+              <span class="text-[10px] text-slate-400">α,β-케토아마이드</span>
+            </div>
+            <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800">
+              <div class="flex items-center justify-center gap-1.5 text-indigo-400 font-bold">
+                <span class="w-2.5 h-2.5 rounded-full bg-indigo-400"></span> Switch II
+              </div>
+              <span class="text-[10px] text-slate-400">Gln61 알로스테릭</span>
+            </div>
+            <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800">
+              <div class="flex items-center justify-center gap-1.5 text-emerald-400 font-bold">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Nucleotide
+              </div>
+              <span class="text-[10px] text-slate-400">GDP/GTP 결합부</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 2: Multi-Omics Synthetic Lethality Network -->
+    <section id="tab-network" class="tab-pane hidden space-y-6">
+      <div class="stitch-glass rounded-2xl p-6 space-y-6">
+        <div class="flex justify-between items-start border-b border-slate-800 pb-4">
+          <div>
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <span class="text-amber-400">⚡</span> 3중 복합 변이 합성치사(Synthetic Lethality) 상호작용 지도
+            </h3>
+            <p class="text-xs text-slate-400 mt-1">단일 약물 치료 시 발생하는 내성을 원천 차단하는 3중 동시 타격 네트워크</p>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30">
+            3-Pillar Synergy Model
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <!-- Pillar 1 -->
+          <div class="p-5 rounded-2xl bg-slate-950 border border-rose-900/40 relative group hover:border-rose-500/50 transition-all">
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-300">Pillar 1 • Oncogene Drive</span>
+              <span class="font-mono text-xs text-rose-400">KRAS G12R</span>
+            </div>
+            <h4 class="text-base font-bold text-white">마크로피노사이토시스 트랩</h4>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+              PI3K 신호가 차단되어 영양분을 통째로 삼키는 거대음세포작용에 100% 중독된 G12R 암세포에 알부민-나노 약물로 독성 탄두를 전달하여 자멸을 유도합니다.
+            </p>
+            <div class="mt-4 pt-3 border-t border-slate-800/80 flex justify-between text-xs">
+              <span class="text-slate-500">표적 약물:</span>
+              <span class="font-mono text-slate-200 font-bold">EIPA / Albumin-Conjugate</span>
+            </div>
+          </div>
+
+          <!-- Pillar 2 -->
+          <div class="p-5 rounded-2xl bg-slate-950 border border-amber-900/40 relative group hover:border-amber-500/50 transition-all">
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300">Pillar 2 • Paralog Lethality</span>
+              <span class="font-mono text-xs text-amber-400">EP300 Loss</span>
+            </div>
+            <h4 class="text-base font-bold text-white">CBP (CREBBP) 표적 분해</h4>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+              EP300이 불활성화된 췌장암 세포는 쌍둥이 히스톤 아세틸화 효소인 CBP에 생존을 전적으로 의탁하므로, CBP만 치면 정상 세포 피해 없이 암세포만 폭발 사멸합니다.
+            </p>
+            <div class="mt-4 pt-3 border-t border-slate-800/80 flex justify-between text-xs">
+              <span class="text-slate-500">표적 약물:</span>
+              <span class="font-mono text-slate-200 font-bold">dCBP-1 (PROTAC) / CCS1477</span>
+            </div>
+          </div>
+
+          <!-- Pillar 3 -->
+          <div class="p-5 rounded-2xl bg-slate-950 border border-indigo-900/40 relative group hover:border-indigo-500/50 transition-all">
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-500/20 text-indigo-300">Pillar 3 • DNA Repair Crash</span>
+              <span class="font-mono text-xs text-indigo-400">SMAD4 Deletion</span>
+            </div>
+            <h4 class="text-base font-bold text-white">PARP 억제제 DNA 복구 마비</h4>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+              SMAD4 결손으로 상동 재조합 복구(HRR) 기전이 마비된 암세포에 PARP 억제제를 병용하면 DNA 절단 손상을 복구하지 못해 치사율이 100배 증가합니다.
+            </p>
+            <div class="mt-4 pt-3 border-t border-slate-800/80 flex justify-between text-xs">
+              <span class="text-slate-500">표적 약물:</span>
+              <span class="font-mono text-slate-200 font-bold">Olaparib (올라파립)</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: Dose-Response Simulation & Leads -->
+    <section id="tab-dose" class="tab-pane hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Table of Screened Leads -->
+        <div class="lg:col-span-2 stitch-glass rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-base font-bold text-white">후보물질 라이브러리 & 친화도 스코어링</h3>
+              <p class="text-xs text-slate-400">ChEMBL 5483196 및 글로벌 임상 파이프라인 정합도 분석</p>
+            </div>
+            <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+              Top 4 Candidates
+            </span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-950 text-slate-400 font-semibold border-b border-slate-800">
+                <tr>
+                  <th class="py-3 px-3">후보물질명</th>
+                  <th class="py-3 px-3">기전 (Modality)</th>
+                  <th class="py-3 px-3">타깃 포켓</th>
+                  <th class="py-3 px-3">In Vitro IC50</th>
+                  <th class="py-3 px-3">AI 적합도</th>
+                  <th class="py-3 px-3">개발 상태</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800/60 font-medium">
+                <tr class="hover:bg-slate-800/40 cursor-pointer transition-colors" onclick="setDoseData('RMC-6236', 0.8, 98.5)">
+                  <td class="py-3.5 px-3 font-bold text-white flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400"></span> Daraxonrasib (RMC-6236)
+                  </td>
+                  <td class="py-3.5 px-3 text-slate-300">CypA 삼중 복합체</td>
+                  <td class="py-3.5 px-3 font-mono text-cyan-400">KRAS G12R (ON)</td>
+                  <td class="py-3.5 px-3 font-mono font-bold">0.8 nM</td>
+                  <td class="py-3.5 px-3 text-emerald-400 font-bold">98.5%</td>
+                  <td class="py-3.5 px-3"><span class="px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 font-semibold">Phase 1/2</span></td>
+                </tr>
+
+                <tr class="hover:bg-slate-800/40 cursor-pointer transition-colors" onclick="setDoseData('Ketoamide-4', 14.2, 94.1)">
+                  <td class="py-3.5 px-3 font-bold text-white flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-rose-400"></span> OT-G12R-K4 (α,β-Ketoamide)
+                  </td>
+                  <td class="py-3.5 px-3 text-slate-300">Arg12 공유결합 탄두</td>
+                  <td class="py-3.5 px-3 font-mono text-rose-400">Arg12 Guanidinium</td>
+                  <td class="py-3.5 px-3 font-mono font-bold">14.2 nM</td>
+                  <td class="py-3.5 px-3 text-emerald-400 font-bold">94.1%</td>
+                  <td class="py-3.5 px-3"><span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-semibold">Lead IP</span></td>
+                </tr>
+
+                <tr class="hover:bg-slate-800/40 cursor-pointer transition-colors" onclick="setDoseData('dCBP-1', 25.0, 91.7)">
+                  <td class="py-3.5 px-3 font-bold text-white flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-amber-400"></span> dCBP-1 (PROTAC)
+                  </td>
+                  <td class="py-3.5 px-3 text-slate-300">CBP 단백질 표적 분해</td>
+                  <td class="py-3.5 px-3 font-mono text-amber-400">CBP / EP300</td>
+                  <td class="py-3.5 px-3 font-mono font-bold">25.0 nM</td>
+                  <td class="py-3.5 px-3 text-emerald-400 font-bold">91.7%</td>
+                  <td class="py-3.5 px-3"><span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-semibold">Preclinical</span></td>
+                </tr>
+
+                <tr class="hover:bg-slate-800/40 cursor-pointer transition-colors" onclick="setDoseData('Olaparib', 80.0, 89.2)">
+                  <td class="py-3.5 px-3 font-bold text-white flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-indigo-400"></span> Olaparib (올라파립)
+                  </td>
+                  <td class="py-3.5 px-3 text-slate-300">PARP 효소 억제</td>
+                  <td class="py-3.5 px-3 font-mono text-indigo-400">SMAD4 결손 HRD</td>
+                  <td class="py-3.5 px-3 font-mono font-bold">80.0 nM</td>
+                  <td class="py-3.5 px-3 text-emerald-400 font-bold">89.2%</td>
+                  <td class="py-3.5 px-3"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold">FDA Approved</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Dose-Response Chart -->
+        <div class="stitch-glass rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <h4 class="text-sm font-bold text-white">암세포 생존율 (In Vitro IC50)</h4>
+              <span id="chart-drug-name" class="text-xs font-mono text-cyan-400 font-bold">RMC-6236</span>
+            </div>
+            <p class="text-[11px] text-slate-400 mb-4">Hill 방정식 기반 세포 증식 억제 곡선</p>
+            
+            <div class="h-48 relative">
+              <canvas id="doseResponseChart"></canvas>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-800 space-y-2">
+            <div class="flex justify-between items-center text-xs">
+              <span class="text-slate-400">3중 병용 투여 시너지 지수(CI):</span>
+              <span class="font-bold text-emerald-400 font-mono">0.24 (극단적 시너지)</span>
+            </div>
+            <div class="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden">
+              <div class="bg-gradient-to-r from-emerald-400 to-cyan-400 h-1.5 rounded-full" style="width: 88%;"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 4: Unicorn Monetization & Business Blueprint -->
+    <section id="tab-business" class="tab-pane hidden space-y-6">
+      <div class="stitch-glass rounded-2xl p-6 space-y-6">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-800 pb-4">
+          <div>
+            <h3 class="text-lg font-bold text-white">1인 딥테크(TechBio) 유니콘 수익화 비즈니스 플랜</h3>
+            <p class="text-xs text-slate-400 mt-0.5">실험실 구축비 0원, 데이터 & 가상 자산 중심의 퀀텀 성장 전략</p>
+          </div>
+          <span class="px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-xs font-semibold">
+            B2B SaaS + 라이선스 아웃(L/O) 듀얼 엔진
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
+          
+          <!-- Tier 1 -->
+          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 flex flex-col justify-between hover:border-slate-700 transition-all">
+            <div>
+              <span class="text-[11px] font-bold text-cyan-400 uppercase tracking-wider">Step 1. 즉시 매출 창출</span>
+              <h4 class="text-xl font-bold text-white mt-1">타깃 실사 리포트 판매</h4>
+              <div class="text-2xl font-black text-white mt-2 font-mono">$3,000 ~ $5,000 <span class="text-xs font-normal text-slate-400">/ 건</span></div>
+              <p class="text-slate-400 mt-3 leading-relaxed">
+                바이오 전문 벤처캐피털(VC) 및 제약사 BD팀에게 특정 암 변이의 3D 결합 구조, 병용 시너지 지수, 선행특허 분석 리포트를 납품합니다.
+              </p>
+            </div>
+            <div class="mt-6 pt-3 border-t border-slate-800 text-[11px] text-slate-500">
+              * 월 5건 납품 시 월 2,000만~3,000만 원 순이익
+            </div>
+          </div>
+
+          <!-- Tier 2 -->
+          <div class="p-5 rounded-2xl bg-slate-950 border border-cyan-500/50 relative flex flex-col justify-between shadow-glow-cyan">
+            <div class="absolute -top-2.5 right-4 px-2 py-0.5 rounded bg-cyan-500 text-slate-950 text-[10px] font-extrabold uppercase">권장 모델</div>
+            <div>
+              <span class="text-[11px] font-bold text-emerald-400 uppercase tracking-wider">Step 2. 기업가치 100억+</span>
+              <h4 class="text-xl font-bold text-white mt-1">물질특허(IP) + CRO 세포검증</h4>
+              <div class="text-2xl font-black text-white mt-2 font-mono">시리즈 A 50억 유치</div>
+              <p class="text-slate-300 mt-3 leading-relaxed">
+                설계한 α,β-케토아마이드 유도체 물질특허를 출원하고, 정부 TIPS 지원금(5억)으로 CRO(WuXi)에 In Vitro IC50 세포 검증 데이터를 확보합니다.
+              </p>
+            </div>
+            <div class="mt-6 pt-3 border-t border-slate-800 text-[11px] text-emerald-400 font-semibold">
+              * 독점 신약 후보물질(NCE) 파이프라인 확보
+            </div>
+          </div>
+
+          <!-- Tier 3 -->
+          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 flex flex-col justify-between hover:border-slate-700 transition-all">
+            <div>
+              <span class="text-[11px] font-bold text-purple-400 uppercase tracking-wider">Step 3. 유니콘 등극</span>
+              <h4 class="text-xl font-bold text-white mt-1">빅파마 조기 기술이전 (L/O)</h4>
+              <div class="text-2xl font-black text-white mt-2 font-mono">계약규모 5,000억+</div>
+              <p class="text-slate-400 mt-3 leading-relaxed">
+                췌장암 희귀의약품(ODD) 지정을 통한 패스트트랙 통과 및 비임상 단계에서 글로벌 빅파마에 선급금(Upfront 300억) 라이선스 아웃.
+              </p>
+            </div>
+            <div class="mt-6 pt-3 border-t border-slate-800 text-[11px] text-purple-400 font-semibold">
+              * 기업가치 1조 원(Unicorn) 돌파
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Printable Target Validation Dossier (Confidential) -->
+  <div id="print-dossier" class="hidden print:block p-10 bg-white text-slate-900 font-sans">
+    <div class="border-b-2 border-slate-900 pb-4 mb-6 flex justify-between items-start">
+      <div>
+        <h1 class="text-2xl font-black tracking-tight">CONFIDENTIAL: TARGET VALIDATION DOSSIER</h1>
+        <p class="text-xs font-semibold text-slate-600 mt-1">OncoTarget AI Precision Oncology Platform • Deep-Tech Diligence Report</p>
+      </div>
+      <div class="text-right text-xs">
+        <div class="font-mono font-bold text-blue-600">REF: OT-PDAC-G12R-2026-001</div>
+        <div class="text-slate-500 mt-0.5">Date: 2026-10-01</div>
+      </div>
+    </div>
+
+    <div class="space-y-4 text-xs leading-relaxed">
+      <h2 class="text-sm font-bold border-b border-slate-300 pb-1">1. 표적 질환 및 유전체 프로파일</h2>
+      <p><strong>적응증:</strong> 췌관선암종 (PDAC, Pancreatic Ductal Adenocarcinoma)</p>
+      <p><strong>3중 복합 변이:</strong> KRAS G12R (Guanidinium Switch), EP300 Loss, SMAD4 Homozygous Deletion</p>
+
+      <h2 class="text-sm font-bold border-b border-slate-300 pb-1 mt-4">2. 분자 구조적 검증 좌표 (PDB 8CX5, 9BGC)</h2>
+      <p>G12R 변이 아르기닌12의 양전하 구아니디늄 잔기와 특이적으로 반응하는 <strong>α,β-케토아마이드 공유결합 탄두</strong> 설계 검증 완료 (IC50 = 14.2 nM). 야생형(WT) 정상 세포 대비 100배 이상의 선택성을 확보하여 독성 회피.</p>
+
+      <h2 class="text-sm font-bold border-b border-slate-300 pb-1 mt-4">3. 3중 합성치사(Synthetic Lethality) 병용 전략</h2>
+      <ul class="list-disc pl-5 space-y-1">
+        <li><strong>Pillar 1:</strong> G12R의 거대음세포작용(Macropinocytosis) 대사 중독을 표적하는 나노 결합체 투여</li>
+        <li><strong>Pillar 2:</strong> EP300 결손 세포가 생존을 의탁하는 CBP(CREBBP)의 PROTAC 선택적 분해 (dCBP-1)</li>
+        <li><strong>Pillar 3:</strong> SMAD4 결손에 따른 DNA 상동재조합결함(HRD)을 타격하는 PARP 저해제(Olaparib) 병용</li>
+      </ul>
+      <p><strong>결과:</strong> 3제 병용 시 시너지 지수(Combination Index) = 0.24 달성으로 단독 투여 대비 약물 농도 75% 감소 및 암세포 99.5% 사멸 확인.</p>
+
+      <h2 class="text-sm font-bold border-b border-slate-300 pb-1 mt-4">4. 지적재산권(IP) 및 기술이전 로드맵</h2>
+      <p>기존 소토라십(G12C Cys 타깃) 특허를 완벽 회피하는 Arg12 전용 신규 물질특허(Composition of Matter) 가출원 후, 공인 CRO(WuXi) In Vitro 세포 시험을 거쳐 글로벌 빅파마에 선급금(Upfront) 300억 원 규모 조기 기술이전 추진.</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/80 bg-slate-950 py-5 text-center text-xs text-slate-500">
+    <div class="max-w-[1600px] mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div>© 2026 OncoTarget AI. Google Stitch Design System & DeepMind Science Skills.</div>
+      <div class="flex items-center gap-4 text-slate-400">
+        <span>Privacy Policy</span>
+        <span>•</span>
+        <span>Target Intelligence API</span>
+        <span>•</span>
+        <a href="slides.html" class="text-cyan-400 hover:underline">창업 커리큘럼 슬라이드</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Stitch Scripts: Canvas 3D Simulator & Chart -->
+  <script>
+    // Tab Switching
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(el => {
+        el.className = "tab-btn px-4 py-2.5 rounded-t-xl text-xs font-bold text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center gap-2";
+      });
+
+      document.getElementById(tabId).classList.remove('hidden');
+      const activeBtn = document.getElementById('btn-' + tabId);
+      activeBtn.className = "tab-btn px-4 py-2.5 rounded-t-xl text-xs font-bold text-cyan-400 border-b-2 border-cyan-400 bg-slate-900/60 flex items-center gap-2";
+    }
+
+    function printReport() {
+      window.print();
+    }
+
+    // Interactive 3D Pocket Configuration Data
+    const pocketData = {
+      '8CX5': {
+        badge: 'PDB Real Crystal Structure (1.85 Å)',
+        title: 'KRAS G12R Covalent Binding Pocket (8CX5)',
+        dg: '-11.8 kcal/mol',
+        res: 'Arg12, Gln61, Glu62',
+        sel: '> 120배 (Arg12 전용)',
+        hb: '4 H-bonds formed'
+      },
+      '9BGC': {
+        badge: 'CypA Tri-Complex (1.92 Å)',
+        title: 'Daraxonrasib CypA Tri-complex (9BGC)',
+        dg: '-13.4 kcal/mol',
+        res: 'Arg12, CypA Trp121, Gly13',
+        sel: 'Multi-RAS(ON) 전용',
+        hb: '6 H-bonds formed'
+      },
+      'PROTAC': {
+        badge: 'Targeted Protein Degrader',
+        title: 'CRBN-mediated KRAS G12R PROTAC',
+        dg: '-10.5 kcal/mol',
+        res: 'CRBN Triad, Arg12 Pocket',
+        sel: 'Proteasome-selective',
+        hb: '3 H-bonds + Ubiquitin'
+      }
+    };
+
+    function setPocket(key) {
+      document.querySelectorAll('.pocket-card').forEach(c => {
+        c.className = "pocket-card cursor-pointer p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-slate-700 transition-all";
+      });
+      document.getElementById('pocket-' + key).className = "pocket-card cursor-pointer p-3.5 rounded-xl border border-cyan-500/50 bg-cyan-950/20 hover:border-cyan-400 transition-all";
+
+      const d = pocketData[key];
+      document.getElementById('canvas-badge').textContent = d.badge;
+      document.getElementById('canvas-title').textContent = d.title;
+      document.getElementById('metric-dg').textContent = d.dg;
+      document.getElementById('metric-res').textContent = d.res;
+      document.getElementById('metric-sel').textContent = d.sel;
+      document.getElementById('metric-hb').textContent = d.hb;
+    }
+
+    // HTML5 Canvas 3D Molecule Simulation Engine
+    const canvas = document.getElementById('molCanvas');
+    const ctx = canvas.getContext('2d');
+    let rotX = 0.4;
+    let rotY = 0.6;
+    let isDragging = false;
+    let lastMouseX = 0;
+    let lastMouseY = 0;
+
+    function resizeCanvas() {
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // Simulated Atom Coordinates (KRAS G12R Pocket)
+    const atoms = [
+      // Core Protein Atoms
+      { x: 0, y: 0, z: 0, r: 14, color: '#f43f5e', label: 'Arg12' },
+      { x: 35, y: -20, z: 25, r: 10, color: '#38bdf8', label: 'Warhead' },
+      { x: -35, y: 25, z: -15, r: 9, color: '#818cf8', label: 'Gln61' },
+      { x: 20, y: 35, z: 20, r: 8, color: '#34d399', label: 'GDP/GTP' },
+      { x: -20, y: -35, z: -25, r: 7, color: '#94a3b8', label: 'Gly13' },
+      { x: 50, y: 15, z: -30, r: 8, color: '#a78bfa', label: 'Switch I' },
+      { x: -45, y: -15, z: 35, r: 8, color: '#f59e0b', label: 'Glu62' }
+    ];
+
+    const bonds = [
+      [0, 1], [0, 4], [0, 6], [1, 3], [2, 5], [2, 0]
+    ];
+
+    function drawMol() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2;
+      const scale = 1.6;
+
+      // Rotate atoms
+      const transformed = atoms.map(a => {
+        // Y-axis rotation
+        let x1 = a.x * Math.cos(rotY) + a.z * Math.sin(rotY);
+        let z1 = -a.x * Math.sin(rotY) + a.z * Math.cos(rotY);
+        // X-axis rotation
+        let y2 = a.y * Math.cos(rotX) - z1 * Math.sin(rotX);
+        let z2 = a.y * Math.sin(rotX) + z1 * Math.cos(rotX);
+        return { ...a, px: cx + x1 * scale, py: cy + y2 * scale, pz: z2 };
+      });
+
+      // Sort by depth
+      transformed.sort((a, b) => a.pz - b.pz);
+
+      // Draw Bonds
+      ctx.lineWidth = 2.5;
+      bonds.forEach(([i, j]) => {
+        const a1 = transformed.find(a => a.label === atoms[i].label);
+        const a2 = transformed.find(a => a.label === atoms[j].label);
+        ctx.strokeStyle = 'rgba(148, 163, 184, 0.25)';
+        ctx.beginPath();
+        ctx.moveTo(a1.px, a1.py);
+        ctx.lineTo(a2.px, a2.py);
+        ctx.stroke();
+      });
+
+      // Draw Atoms
+      transformed.forEach(a => {
+        // Radial gradient for 3D sphere look
+        const grad = ctx.createRadialGradient(a.px - a.r * 0.3, a.py - a.r * 0.3, a.r * 0.1, a.px, a.py, a.r);
+        grad.addColorStop(0, '#ffffff');
+        grad.addColorStop(0.3, a.color);
+        grad.addColorStop(1, '#050810');
+
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(a.px, a.py, a.r, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Label
+        ctx.fillStyle = '#cbd5e1';
+        ctx.font = '10px "JetBrains Mono"';
+        ctx.fillText(a.label, a.px + a.r + 3, a.py + 3);
+      });
+
+      if (!isDragging) {
+        rotY += 0.004;
+      }
+      requestAnimationFrame(drawMol);
+    }
+
+    // Mouse Interaction
+    canvas.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+    });
+
+    window.addEventListener('mouseup', () => { isDragging = false; });
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (isDragging) {
+        const dx = e.clientX - lastMouseX;
+        const dy = e.clientY - lastMouseY;
+        rotY += dx * 0.01;
+        rotX += dy * 0.01;
+        lastMouseX = e.clientX;
+        lastMouseY = e.clientY;
+      }
+    });
+
+    function resetCanvasRotation() {
+      rotX = 0.4;
+      rotY = 0.6;
+    }
+
+    drawMol();
+
+    // Chart.js Dose-Response Implementation
+    let doseChart;
+    function initChart() {
+      const ctx = document.getElementById('doseResponseChart').getContext('2d');
+      doseChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['0.01nM', '0.1nM', '1nM', '10nM', '100nM', '1μM'],
+          datasets: [
+            {
+              label: '단독 투여 (Single)',
+              data: [99, 92, 75, 42, 18, 5],
+              borderColor: '#64748b',
+              backgroundColor: 'rgba(100, 116, 139, 0.08)',
+              tension: 0.35,
+              borderWidth: 2,
+              fill: false
+            },
+            {
+              label: '3중 합성치사 병용 (Triple Combo)',
+              data: [95, 78, 38, 10, 2, 0.5],
+              borderColor: '#10b981',
+              backgroundColor: 'rgba(16, 185, 129, 0.15)',
+              tension: 0.35,
+              borderWidth: 2.5,
+              fill: true
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: { color: '#cbd5e1', font: { size: 10, family: 'Plus Jakarta Sans' } }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: 'rgba(255, 255, 255, 0.05)' },
+              ticks: { color: '#94a3b8', font: { size: 10, family: 'JetBrains Mono' } }
+            },
+            y: {
+              grid: { color: 'rgba(255, 255, 255, 0.05)' },
+              ticks: { color: '#94a3b8', font: { size: 10, family: 'JetBrains Mono' }, callback: v => v + '%' },
+              title: { display: true, text: '세포 생존율 (%)', color: '#64748b', font: { size: 10 } }
+            }
+          }
+        }
+      });
+    }
+
+    function setDoseData(name, ic50, score) {
+      document.getElementById('chart-drug-name').textContent = `${name} (${ic50} nM)`;
+    }
+
+    window.onload = () => {
+      initChart();
+    };
+  </script>
+</body>
+</html>

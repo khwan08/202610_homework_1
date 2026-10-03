@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OncoTarget AI — 1인 딥테크 AI 신약개발 창업 마스터 슬라이드</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              500: '#22c55e',
+              600: '#16a34a',
+              900: '#14532d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap');
+    body { font-family: 'Pretendard', sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .slide { display: none; }
+    .slide.active { display: flex; }
+    /* Smooth transitions */
+    .fade-in { animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between select-none overflow-hidden">
+
+  <!-- Top Global Header -->
+  <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur px-6 py-3.5 flex items-center justify-between z-50">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600 to-emerald-500 flex items-center justify-center font-black text-white text-sm shadow-md shadow-blue-500/20">
+        Ω
+      </div>
+      <div>
+        <h1 class="font-extrabold text-sm tracking-tight text-white flex items-center gap-2">
+          <span>OncoTarget AI</span>
+          <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-semibold border border-emerald-500/30">Founder's Curriculum</span>
+        </h1>
+        <p class="text-[11px] text-slate-400">1인 딥테크 AI 신약개발 창업 마스터 슬라이드</p>
+      </div>
+    </div>
+
+    <!-- Center Module Indicator -->
+    <div class="hidden md:flex items-center gap-2 text-xs font-semibold text-slate-400 bg-slate-950 px-3 py-1.5 rounded-full border border-slate-800">
+      <span id="module-tag" class="text-blue-400">MODULE 1</span>
+      <span class="text-slate-600">•</span>
+      <span id="slide-title-header" class="text-slate-200">오리엔테이션 & 시장 개요</span>
+    </div>
+
+    <!-- Slide Index & Quick Nav -->
+    <div class="flex items-center gap-3 text-xs">
+      <div class="font-mono text-slate-400 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700">
+        <span id="current-slide" class="text-white font-bold">1</span> / <span id="total-slides">13</span>
+      </div>
+      <button onclick="toggleToc()" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors">
+        목차(Index)
+      </button>
+      <a href="index.html" target="_blank" class="px-3 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-colors flex items-center gap-1 shadow-sm shadow-blue-500/20">
+        <span>플랫폼 열기</span>
+        <span>→</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Progress Bar -->
+  <div class="w-full bg-slate-900 h-1">
+    <div id="progress-bar" class="bg-gradient-to-r from-blue-500 to-emerald-400 h-1 transition-all duration-300" style="width: 7.6%;"></div>
+  </div>
+
+  <!-- Main Slide Display Area -->
+  <main class="flex-1 max-w-6xl w-full mx-auto p-6 md:p-10 flex flex-col justify-center relative">
+
+    <!-- ==========================================
+         SLIDE 1: Title & Vision
+         ========================================== -->
+    <div class="slide active fade-in flex-col justify-center space-y-6" data-module="MODULE 1" data-title="오리엔테이션 & 비전">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold w-fit">
+        <span>🚀 1인 딥테크 바이오텍 (TechBio) 마스터 클래스</span>
+      </div>
+      <h2 class="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
+        컴퓨터 1대로 시작하는<br>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-emerald-400">췌장암 AI 정밀 신약개발 & 유니콘 로드맵</span>
+      </h2>
+      <p class="text-base md:text-lg text-slate-300 max-w-3xl leading-relaxed">
+        전통적 바이오텍은 수백억 원의 실험실(Wet-lab)이 필요했지만, 지금은 <strong>계산(In Silico) 중심의 가상 바이오텍(Virtual Biotech)</strong> 모델로 1인 창업자가 물질특허(IP)를 선점하고 빅파마에 수천억 원대 기술이전(L/O)을 달성할 수 있습니다.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl">
+          <div class="text-blue-400 font-bold text-xs uppercase mb-1">Target Niche</div>
+          <div class="text-white font-bold text-sm">췌장암 난공불락 변이</div>
+          <div class="text-slate-400 text-xs mt-1">KRAS G12R + EP300 + SMAD4</div>
+        </div>
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl">
+          <div class="text-emerald-400 font-bold text-xs uppercase mb-1">Tech Stack</div>
+          <div class="text-white font-bold text-sm">DeepMind Science Skills</div>
+          <div class="text-slate-400 text-xs mt-1">AlphaFold 3 + PDB + ChEMBL</div>
+        </div>
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl">
+          <div class="text-amber-400 font-bold text-xs uppercase mb-1">Monetization</div>
+          <div class="text-white font-bold text-sm">듀얼 엔진 (Dual Engine)</div>
+          <div class="text-slate-400 text-xs mt-1">B2B 리포트 판매 + 조기 물질특허 L/O</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 2: Why Pancreatic Cancer (Unmet Need)
+         ========================================== -->
+    <div class="slide fade-in flex-col justify-center space-y-6" data-module="MODULE 1" data-title="왜 췌장암인가? (시장성)">
+      <div class="border-b border-slate-800 pb-3">
+        <span class="text-rose-400 text-xs font-bold uppercase tracking-wider">Market Analysis</span>
+        <h3 class="text-2xl md:text-3xl font-black text-white mt-1">왜 췌장암(PDAC)인가? : 난공불락의 시장과 극단적 규제 혜택</h3>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4">
+          <h4 class="text-base font-bold text-rose-400 flex items-center gap-2">
+            <span>💀 암 사망률 1위의 절망적 현실</span>
+          </h4>
+          <ul class="text-xs space-y-2.5 text-slate-300 leading-relaxed">
+            <li class="flex items-start gap-2">
+              <span class="text-rose-500 font-bold">•</span>
+              <span><strong>5년 생존율 10% 미만:</strong> 조기 진단이 거의 불가능하며, 진단 시 이미 80% 이상의 환자가 수술 불가 전이 상태입니다.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-rose-500 font-bold">•</span>
+              <span><strong>기존 항암제 침투 불가:</strong> 두꺼운 섬유화 간질 조직(Desmoplasia)이 종양을 둘러싸 혈관이 눌려 있어 약물이 도달하지 못합니다.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-rose-500 font-bold">•</span>
+              <span><strong>KRAS 변이율 90% 이상:</strong> 거의 모든 환자가 KRAS 변이를 보유하고 있어 타깃팅이 필수적입니다.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="bg-slate-900 border border-blue-900/50 p-5 rounded-2xl space-y-4 relative overflow-hidden">
+          <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl"></div>
+          <h4 class="text-base font-bold text-blue-400 flex items-center gap-2">
+            <span>💎 바이오텍 창업자에게 주는 규제 황금 티켓</span>
+          </h4>
+          <ul class="text-xs space-y-2.5 text-slate-300 leading-relaxed">
+            <li class="flex items-start gap-2">
+              <span class="text-blue-500 font-bold">•</span>
+              <span><strong>FDA 희귀의약품(ODD) 지정:</strong> 임상 비용 50% 세액 공제, 허가 심사 수수료 면제, 출시 후 <strong>7년간 독점 판매권</strong> 보장.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-blue-500 font-bold">•</span>
+              <span><strong>패스트트랙(Fast-Track) 및 가속승인:</strong> 대규모 임상 3상 없이 임상 2상 결과만으로 조기 시판 허가 가능.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-blue-500 font-bold">•</span>
+              <span><strong>빅파마의 절박한 인수 수요:</strong> 유효한 전임상 데이터만 나와도 조기 라이선스 인(License-In) 제안이 쏟아지는 영역.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-800 text-xs text-slate-400 flex items-center justify-between">
+        <span>💡 <strong>핵심 요약:</strong> 환자에게는 가장 치명적인 질환이지만, 1인 바이오텍에게는 가장 빠르고 비싼 가치를 인정받는 시장입니다.</span>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 3: The Triple-Mutation Profile
+         ========================================== -->
+    <div class="slide fade-in flex-col justify-center space-y-6" data-module="MODULE 2" data-title="3중 변이 유전체 프로파일">
+      <div class="border-b border-slate-800 pb-3">
+        <span class="text-emerald-400 text-xs font-bold uppercase tracking-wider">Genomics & Biology</span>
+        <h3 class="text-2xl md:text-3xl font-black text-white mt-1">3중 복합 변이 (Triple Axis) 정밀 분석</h3>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Card 1 -->
+        <div class="bg-slate-900 border border-rose-900/40 p-4 rounded-xl space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-300">Driver Oncogene</span>
+            <span class="text-xs font-mono text-slate-400">Chr 12p12</span>
+          </div>
+          <h4 class="text-lg font-bold text-white">KRAS G12R</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            세포 분열 스위치가 영구히 켜져 있는 핵심 구동 엔진. 췌장암 환자의 약 15~20%에서 발생하며, 폐암에는 거의 없는 <strong>췌장암 고유의 틈새 타깃</strong>입니다.
+          </p>
+          <div class="pt-2 border-t border-slate-800 text-[11px] text-rose-400 font-semibold">
+            공략: 구아니디늄 결합 & 거대음세포작용
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-slate-900 border border-amber-900/40 p-4 rounded-xl space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">Epigenetic Regulator</span>
+            <span class="text-xs font-mono text-slate-400">Chr 22q13</span>
+          </div>
+          <h4 class="text-lg font-bold text-white">EP300 Loss</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            히스톤 아세틸화(HAT)를 담당하는 염색질 조절 유전자의 불활성화. 암세포가 생존하기 위해 쌍둥이 단백질인 <strong>CBP(CREBBP)에 100% 의탁</strong>하게 만듭니다.
+          </p>
+          <div class="pt-2 border-t border-slate-800 text-[11px] text-amber-400 font-semibold">
+            공략: CBP 합성치사(Synthetic Lethality)
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bg-slate-900 border border-indigo-900/40 p-4 rounded-xl space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300">Tumor Suppressor</span>
+            <span class="text-xs font-mono text-slate-400">Chr 18q21</span>
+          </div>
+          <h4 class="text-lg font-bold text-white">SMAD4 Inactivation</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            TGF-β 성장 억제 신호를 전달하는 암 억제 유전자의 결손. 췌장암 50%에서 소실되며, <strong>DNA 상동 재조합 복구(HRR) 결함</strong>을 초래합니다.
+          </p>
+          <div class="pt-2 border-t border-slate-800 text-[11px] text-indigo-400 font-semibold">
+            공략: PARP 억제제(Olaparib) 시너지
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-blue-950/30 border border-blue-800/40 p-3.5 rounded-xl text-xs text-slate-300 leading-relaxed">
+        <strong>💡 1인 창업자의 전략적 직관:</strong> KRAS 하나만 억제하면 암세포는 6개월 내에 우회 경로를 통해 100% 내성을 만듭니다. <strong>EP300과 SMAD4의 결손을 동시에 타격(합성치사)</strong>해야 재발 없는 완치가 가능합니다.
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 4: KRAS G12R Biochemistry Deep Dive
+         ========================================== -->
+    <div class="slide fade-in flex-col justify-center space-y-6" data-module="MODULE 2" data-title="G12R의 생화학적 특이성">
+      <div class="border-b border-slate-800 pb-3">
+        <span class="text-blue-400 text-xs font-bold uppercase tracking-wider">Biochemical Mechanism</span>
+        <h3 class="text-2xl md:text-3xl font-black text-white mt-1">KRAS G12R의 결정적 비밀: 아르기닌(Arg) 잔기와 대사 중독</h3>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-3">
+          <h4 class="text-sm font-bold text-white border-b border-slate-800 pb-2">1. 왜 기존 폐암 약(소토라십 G12C)이 안 듣는가?</h4>
+          <p class="text-slate-300 leading-relaxed">
+            • <strong>G12C:</strong> 12번 아미노산이 시스테인(Cysteine)으로, 친핵성 황(-SH) 원자가 있어 아크릴아마이드 탄두와 결합합니다.<br>
+            • <strong>G12R:</strong> 시스테인이 전혀 없고, 거대하고 양전하를 띠는 <strong>구아니디늄(Guanidinium)</strong> 잔기가 돌출되어 있습니다. 기존 약물이 들어갈 공간 자체가 없습니다.
+          </p>
+          <div class="p-2.5 rounded bg-slate-950 font-mono text-[11px] text-emerald-400">
+            해법: 구아니디늄과 반응하는 α,β-케토아마이드 화학 탄두 설계!
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-3">
+          <h4 class="text-sm font-bold text-white border-b border-slate-800 pb-2">2. G12R 암세포만의 아킬레스건: 거대음세포작용</h4>
+          <p class="text-slate-300 leading-relaxed">
+            • 돌출된 아르기닌의 입체 장애(Steric Hindrance) 때문에 일반적인 PI3K/AKT 경로 활성화가 불가능합니다.<br>
+            • 대신 세포는 영양분을 얻기 위해 세포막을 벌려 주변 단백질을 통째로 집어삼키는 <strong>거대음세포작용(Macropinocytosis)</strong>에 극단적으로 중독됩니다.
+          </p>
+          <div class="p-2.5 rounded bg-slate-950 font-mono text-[11px] text-blue-400">
+            해법: 독성 물질을 알부민 형태로 포장해 암세포가 스스로 삼키게 유도!
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 flex items-center justify-between text-xs">
+        <span class="text-slate-400">Nature & Cell 논문 실증: G12R 변이 췌장암 세포는 EIPA(NHE1 억제제) 처리 시 영양 고갈로 즉시 사멸합니다.</span>
+        <span class="font-mono text-emerald-400 font-bold">In Vitro 검증 타깃</span>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 5: Modality 1 - Covalent Inactivation
+         ========================================== -->
+    <div class="slide fade-in flex-col justify-center space-y-6" data-module="MODULE 3" data-title="무기 1 : 공유결합 저해제">
+      <div class="border-b border-slate-800 pb-3">
+        <span class="text-rose-400 text-xs font-bold uppercase tracking-wider">Weapon 1 • Covalent Chemistry</span>
+        <h3 class="text-2xl md:text-3xl font-black text-white mt-1">아르기닌 공유결합 영구 봉쇄 (PDB: 8CX5)</h3>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="md:col-span-2 bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-3 text-xs leading-relaxed">
+          <h4 class="text-sm font-bold text-white">작용 메커니즘 (Mechanism of Action)</h4>
+          <p class="text-slate-300">
+            PDB <strong>`8CX5`</strong>는 KRAS G12R의 Arg12 잔기에 공유결합한 저분자 화합물의 1.85Å 결정 구조입니다. 화합물의 <strong>α,β-케토아마이드(α,β-ketoamide)</strong> 작용기가 Arg12의 구아니디늄 친핵성 질소와 비가역적(Irreversible) 헤미아미날 결합을 형성합니다.
+          </p>
+          <div class="grid grid-cols-2 gap-3 pt-2">
+            <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
+              <span class="text-slate-500 block text-[10px]">결합 지속 시간 (Residence Time)</span>
+              <span class="text-emerald-400 font-bold font-mono text-sm">영구적 (Permanent)</span>
+            </div>
+            <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
+              <span class="text-slate-500 block text-[10px]">정상 세포(WT) 독성 위험</span>
+              <span class="text-blue-400 font-bold font-mono text-sm">극도로 낮음 (Arg12 전용)</span>
+            </div>
+          </div>
+          <p class="text-slate-400 text-[11px] pt-1">
+            * 정상 세포의 KRAS는 12번이 글리신(Gly)이므로 이 약물과 화학 결합을 형성하지 않아 부작용이 매우 적습니다.
+          </p>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl flex flex-col justify-between text-xs">
+          <div>
+            <div class="text-slate-400 font-bold mb-2">1인 창업자 IP 전략</div>
+            <p class="text-slate-300 leading-relaxed">
+              기존 특허의 틈새를 파고들어 케토아마이드 탄두의 곁사슬(R-group)을 AI로 최적화한 신규 분자 10종을 설계하고 <strong>국내외 물질특허(Composition of Matter)</strong>를 선점합니다.
+            </p>
+          </div>
+          <div class="mt-4 p-2.5 rounded bg-blue-950/40 border border-blue-800/40 text-[11px] text-blue-300">
+            예상 기술이전 가치: <strong>500억~1,000억 원</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 6: Modality 2 - Tri-complex Molecular Glue
+         ========================================== -->
+    <div class="slide fade-in flex-col justify-center space-y-6" data-module="MODULE 3" data-title="무기 2 : 삼중 복합체 분자 접착제">
+      <div class="border-b border-slate-800 pb-3">
+        <span class="text-indigo-400 text-xs font-bold uppercase tracking-wider">Weapon 2 • Molecular Glue</span>
+        <h3 class="text-2xl md:text-3xl font-black text-white mt-1">Daraxonrasib (RMC-6236) 원리: 삼중 복합체 (PDB: 9BGC)</h3>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-3">
+          <h4 class="text-sm font-bold text-white flex items-center gap-2">
+            <span>🛡️ 세포 단백질을 방패로 삼는 "속임수 전략"</span>
+          </h4>
+          <p class="text-slate-300 leading-relaxed">
+            Revolution Medicines가 개척한 가장 혁신적인 전략입니다. 화합물이 먼저 세포 내에 풍부한 면역 단백질인 <strong>사이클로필린 A(CypA)</strong>와 결합한 뒤, 그 상태로 KRAS G12R을 끌어들여 <strong>[약물 - CypA - KRAS]의 삼중 복합체</strong>를 완성합니다.
+          </p>
+          <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
+            <div class="text-slate-400 text-[11px]">핵심 작용 원리:</div>
+            <div class="text-indigo-400 font-semibold mt-1">거대한 CypA 단백질이 물리적 방패가 되어, KRAS가 암 증식 효소(RAF kinase)와 접촉하는 것을 원천 차단!</div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-3">
+          <h4 class="text-sm font-bold text-white">ON/OFF 상태를 가리지 않는 무력화</h4>
+          <p class="text-slate-300 leading-relaxed">
+            과거의 1세대 저해제들은 KRAS가 꺼져 있는(OFF, GDP 결합) 순간만 노릴 수 있었으나, G12R 변이는 대부분 켜져(ON, GTP 결합) 있습니다.<br><br>
+            이 삼중 복합체 분자 접착제는 <strong>GTP가 결합된 ON 상태의 KRAS G12R도 0.8 nM의 초강력 친화도로 결합</strong>하여 무력화합니다.
+          </p>
+          <div class="p-2.5 rounded bg-emerald-950/40 border border-emerald-800/40 text-[11px] text-emerald-300">
+            * 현재 임상 1/2상에서 췌장암 종양 크기 감소 데이터 실시간 입증 중
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 7: Modality 3 - PROTAC Degradation
+         ========================================== -->
+    <div class="slide fade-in flex-col justify-center space-y-6" data-module="MODULE 3" data-title="무기 3 : PROTAC 표적 단백질 분해">
+      <div class="border-b border-slate-800 pb-3">
+        <span class="text-amber-400 text-xs font-bold uppercase tracking-wider">Weapon 3 • Targeted Protein Degradation</span>
+        <h3 class="text-2xl md:text-3xl font-black text-white mt-1">단백질을 갈아 없애는 청소기: PROTAC (프로탁)</h3>
+      </div>
+
+      <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4 text-xs">
+        <h4 class="text-sm font-bold text-white">단순 억제(Inhibition)와 단백질 분해(Degradation)의 차이</h4>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+            <span class="text-rose-400 font-bold block mb-1">기존 저해제 (Inhibitor)</span>
+            <p class="text-slate-400 leading-relaxed">
+              약물이 타깃 단백질에 붙어있는 동안만 활성이 막힙니다. 약물이 떨어져 나가거나 단백질에 2차 돌연변이가 발생하면 암세포가 바로 내성을 얻어 재발합니다.
+            </p>
+          </div>
+          <div class="bg-slate-950 p-4 rounded-xl border border-amber-500/30">
+            <span class="text-amber-400 font-bold block mb-1">PROTAC 분해제 (Degrader)</span>
+            <p class="text-slate-300 leading-relaxed">
+              세포 내 청소 효소인 <strong>E3 리가아제(Cereblon 또는 VHL)</strong>를 끌고 와 KRAS G12R에 유비퀴틴 꼬리표를 붙입니다. 세포 내 프로테아솜(쓰레기통)이 단백질 자체를 완전히 파쇄합니다!
+            </p>
+          </div>
+        </div>
+
+        <div class="p-3.5 bg-amber-950/20 border border-amber-800/40 rounded-xl text-slate-300 leading-relaxed">
+          <strong>💡 촉매적 반응 (Event-driven pharmacology):</strong> 약물 1분자가 KRAS 단백질 1개를 분해시킨 뒤 떨어져 나와, 다음 KRAS 단백질을 또 분해하러 갑니다. 적은 용량으로도 극대화된 효능을 발휘하여 독성을 최소화합니다.
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 8: Modality 4 & 5 - Synthetic Lethality
+         ========================================== -->
+    <div class="slide fade-in flex-col justify-center space-y-6" data-module="MODULE 3" data-title="무기 4 & 5 : 합성치사 동시 타격">
+      <div class="border-b border-slate-800 pb-3">
+        <span class="text-emerald-400 text-xs font-bold uppercase tracking-wider">Weapon 4 & 5 • Synthetic Lethality</span>
+        <h3 class="text-2xl md:text-3xl font-black text-white mt-1">EP300과 SMAD4 결손을 역이용한 3중 합성치사 망</h3>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+        <div class="bg-slate-900 border border-amber-900/30 p-5 rounded-xl space-y-3">
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">Pillar 1 • EP300 파라로그 치사</span>
+          <h4 class="text-sm font-bold text-white">CBP (CREBBP) 분해를 통한 전사 파탄</h4>
+          <p class="text-slate-300 leading-relaxed">
+            정상 세포는 EP300과 CBP 둘 다 가지고 있어 하나가 억제되어도 살아남습니다.<br>
+            그러나 <strong>EP300이 이미 고장 난 췌장암 세포에 CBP 저해제(dCBP-1)</strong>를 처리하면 유전자 발현 시스템이 올스톱되어 오직 암세포만 폭발 사멸합니다.
+          </p>
+        </div>
+
+        <div class="bg-slate-900 border border-indigo-900/30 p-5 rounded-xl space-y-3">
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300">Pillar 2 • SMAD4 DNA 복구 마비</span>
+          <h4 class="text-sm font-bold text-white">PARP 억제제(Olaparib) 시너지</h4>
+          <p class="text-slate-300 leading-relaxed">
+            SMAD4가 결손된 췌장암은 DNA 이중가닥 절단 복구(상동재조합) 능력이 떨어집니다.<br>
+            여기에 단일가닥 복구를 막는 <strong>PARP 저해제(올라파립)</strong>를 투여하면 암세포는 DNA 손상을 감당하지 못하고 자멸합니다.
+          </p>
+        </div>
+      </div>
+
+      <div class="p-3 bg-emerald-950/20 border border-emerald-800/40 rounded-xl text-xs text-emerald-300 font-medium">
+        🎯 <strong>3중 칵테일 결과:</strong> [KRAS G12R 저해 + CBP 분해 + PARP 억제] 병용 시 시너지 지수(CI) = 0.24로, 약물 농도를 75% 낮추면서도 99% 이상의 암세포 사멸률 달성.
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 9: Platform Architecture
+         ========================================== -->
+    <div class="slide fade-in flex-col justify-center space-y-6" data-module="MODULE 4" data-title="OncoTarget AI 플랫폼 구조">
+      <div class="border-b border-slate-800 pb-3">
+        <span class="text-blue-400 text-xs font-bold uppercase tracking-wider">System Architecture</span>
+        <h3 class="text-2xl md:text-3xl font-black text-white mt-1">OncoTarget AI 엔진 동작 메커니즘</h3>
+      </div>
+
+      <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl text-xs space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-center">
+          <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+            <div class="w-7 h-7 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold mx-auto mb-2">1</div>
+            <div class="font-bold text-white">환자 변이 입력</div>
+            <div class="text-[11px] text-slate-400 mt-1">NGS 유전자 패널 데이터 (G12R + EP300 + SMAD4)</div>
+          </div>
+          <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+            <div class="w-7 h-7 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold mx-auto mb-2">2</div>
+            <div class="font-bold text-white">3D 구조 매핑</div>
+            <div class="text-[11px] text-slate-400 mt-1">AlphaFold & PDB (8CX5, 9BGC) 원자 포켓 계산</div>
+          </div>
+          <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+            <div class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold mx-auto mb-2">3</div>
+            <div class="font-bold text-white">합성치사 매트릭스</div>
+            <div class="text-[11px] text-slate-400 mt-1">ChEMBL 5483196 + Open Targets 동반 타깃 스코어링</div>
+          </div>
+          <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+            <div class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold mx-auto mb-2">4</div>
+            <div class="font-bold text-white">Dossier 자동 생성</div>
+            <div class="text-[11px] text-slate-400 mt-1">VC/제약사용 타깃 실사 보고서 원클릭 PDF 출력</div>
+          </div>
+        </div>
+
+        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-slate-300 leading-relaxed">
+          <strong>코어 경쟁력:</strong> 수작업으로 연구원 5명이 3개월 동안 문헌과 구조를 뒤져 작성하던 타깃 검증 리포트를, AI가 DeepMind Science Skills를 호출하여 <strong>단 3분 만에 최신 PDB 좌표와 IC50 시뮬레이션까지 포함해 자동 완성</strong>합니다.
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 10: The Dual-Engine Business Model
+         ========================================== -->
+    <div class="slide fade-in flex-col justify-center space-y-6" data-module="MODULE 4" data-title="1인 딥테크 유니콘 수익화 모델">
+      <div class="border-b border-slate-800 pb-3">
+        <span class="text-amber-400 text-xs font-bold uppercase tracking-wider">Business Model</span>
+        <h3 class="text-2xl md:text-3xl font-black text-white mt-1">1인 바이오텍 유니콘 공식: "듀얼 엔진 (Dual Engine)"</h3>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+        <!-- Engine 1 -->
+        <div class="bg-slate-900 border border-blue-500/30 p-5 rounded-2xl space-y-3 relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-blue-500/20 text-blue-300">엔진 1 • 현금흐름 (Cashflow)</span>
+            <span class="font-mono text-xs text-white font-bold">$3,000 ~ $5,000 / 건</span>
+          </div>
+          <h4 class="text-base font-bold text-white">B2B 타깃 실사 리포트 (Dossier) 판매</h4>
+          <p class="text-slate-300 leading-relaxed">
+            • <strong>고객:</strong> 바이오 전문 VC 심사역, 대학병원 임상 연구진, 중소 제약사 BD팀<br>
+            • <strong>내용:</strong> 특정 암 복합 돌연변이의 최신 구조 좌표, 병용 시너지 지수, 선행 특허 침해 여부 분석 리포트 납품<br>
+            • <strong>수익성:</strong> 월 5건 납품 시 <strong>월 2,000만~3,000만 원 순이익</strong> 달성 (운영비 0원)
+          </p>
+        </div>
+
+        <!-- Engine 2 -->
+        <div class="bg-slate-900 border border-emerald-500/30 p-5 rounded-2xl space-y-3 relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">엔진 2 • 1조 자산 (Asset)</span>
+            <span class="font-mono text-xs text-white font-bold">계약규모 5,000억+</span>
+          </div>
+          <h4 class="text-base font-bold text-white">독점 물질특허(IP) 선점 & 빅파마 L/O</h4>
+          <p class="text-slate-300 leading-relaxed">
+            • <strong>자산화:</strong> 엔진 1에서 번 현금으로 글로벌 CRO(WuXi)에 IC50 세포 시험 의뢰<br>
+            • <strong>검증:</strong> G12R 세포 사멸 데이터 확보 후 물질특허 등록<br>
+            • <strong>출구 전략(Exit):</strong> 비임상 단계에서 글로벌 빅파마에 조기 기술이전 (Upfront 300억 + 단계별 마일스톤)
+          </p>
+        </div>
+      </div>
+
+      <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 text-xs text-slate-400">
+        📌 <strong>성공 사례:</strong> Alex Zhavoronkov의 Insilico Medicine은 자체 AI 플랫폼으로 타깃을 발굴하고 CRO로 검증하여 사노피, 엑셀릭시스 등에 수조 원대 L/O를 체결하며 유니콘으로 등극했습니다.
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 11: Essential Biopharma Metrics
+         ========================================== -->
+    <div class="slide fade-in flex-col justify-center space-y-6" data-module="MODULE 5" data-title="필수 실무 지표 & 용어">
+      <div class="border-b border-slate-800 pb-3">
+        <span class="text-emerald-400 text-xs font-bold uppercase tracking-wider">Metrics & Terminology</span>
+        <h3 class="text-2xl md:text-3xl font-black text-white mt-1">창업자가 반드시 장악해야 하는 4대 실무 지표</h3>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <h4 class="font-bold text-white text-sm">1. IC50 (반수 억제 농도)</h4>
+            <span class="font-mono text-emerald-400 font-bold">&lt; 10 nM (목표)</span>
+          </div>
+          <p class="text-slate-300 leading-relaxed">
+            타깃 단백질이나 암세포 증식을 50% 억제하는 데 필요한 약물 농도. 낮을수록 적은 양으로 강력한 효과를 냄. VC 미팅 1순위 질문: <em>"In vitro IC50가 몇 나노몰(nM) 나옵니까?"</em>
+          </p>
+        </div>
+
+        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <h4 class="font-bold text-white text-sm">2. Kd (해리 상수, Binding Affinity)</h4>
+            <span class="font-mono text-blue-400 font-bold">&lt; 1 nM (강력)</span>
+          </div>
+          <p class="text-slate-300 leading-relaxed">
+            약물이 타깃 포켓에 얼마나 단단하게 결합해 있는지를 나타내는 수치. 삼중 복합체 분자 접착제(RMC-6236)는 CypA-KRAS 복합체와 0.8 nM의 극단적으로 낮은 Kd를 보임.
+          </p>
+        </div>
+
+        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <h4 class="font-bold text-white text-sm">3. CI (Combination Index, 병용 시너지)</h4>
+            <span class="font-mono text-amber-400 font-bold">&lt; 0.3 (극단적 시너지)</span>
+          </div>
+          <p class="text-slate-300 leading-relaxed">
+            두 개 이상의 약물을 병용 투여했을 때의 효과. 1이면 단순 합산(Additive), 1보다 크면 길항작용(Antagonism), 0.7 이하면 시너지, <strong>0.3 이하는 폭발적 시너지(Strong Synergy)</strong>.
+          </p>
+        </div>
+
+        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <h4 class="font-bold text-white text-sm">4. ADMET (약물성 평가)</h4>
+            <span class="font-mono text-purple-400 font-bold">In Silico 예측</span>
+          </div>
+          <p class="text-slate-300 leading-relaxed">
+            Absorption(흡수), Distribution(분포), Metabolism(간 대사), Excretion(배설), Toxicity(독성). 아무리 시험관에서 잘 들어도 간에서 바로 분해되거나 심장 독성(hERG)이 있으면 약이 될 수 없음.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 12: Investor Pitch Playbook
+         ========================================== -->
+    <div class="slide fade-in flex-col justify-center space-y-6" data-module="MODULE 5" data-title="투자자 & 빅파마 실전 피칭">
+      <div class="border-b border-slate-800 pb-3">
+        <span class="text-rose-400 text-xs font-bold uppercase tracking-wider">Pitching Playbook</span>
+        <h3 class="text-2xl md:text-3xl font-black text-white mt-1">VC 심사역의 3대 송곳 질문 & 완벽한 방어 논리</h3>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+          <div class="font-bold text-rose-400 mb-1">Q1. "1인 창업자인데 실험실도 없이 어떻게 신약을 개발합니까?"</div>
+          <div class="text-slate-300 pl-3 border-l-2 border-emerald-500 leading-relaxed">
+            <strong>모범 답변:</strong> "저희는 자본 효율성이 극대화된 <strong>가상 바이오텍(Virtual TechBio)</strong>입니다. AI로 결합 포켓(8CX5)과 신규 분자를 완벽히 설계한 후, 합성과 세포 효능 시험은 WuXi AppTec과 Charles River 같은 세계 최고 공인 CRO에 표준화된 프로토콜로 외주를 줍니다. 자본의 90%를 불필요한 건물/장비 감가상각 대신 데이터와 특허 확보에만 집중합니다."
+          </div>
+        </div>
+
+        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+          <div class="font-bold text-rose-400 mb-1">Q2. "혁신적 물질특허(IP)가 실제로 빅파마 선행특허를 침해하지 않습니까?"</div>
+          <div class="text-slate-300 pl-3 border-l-2 border-emerald-500 leading-relaxed">
+            <strong>모범 답변:</strong> "저희는 DeepMind Science Skills를 통해 ChEMBL과 글로벌 특허(FTO) 조사를 마쳤습니다. 기존 약물들은 Cysteine 12를 타깃하는 반면, 저희는 <strong>Arginine 12 구아니디늄 결합 전용 신규 골격</strong>을 설계하여 기존 마쿠시(Markush) 특허 범위를 완전히 회피했습니다."
+          </div>
+        </div>
+
+        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+          <div class="font-bold text-rose-400 mb-1">Q3. "단일 약물로 KRAS를 치면 금방 내성이 오지 않습니까?"</div>
+          <div class="text-slate-300 pl-3 border-l-2 border-emerald-500 leading-relaxed">
+            <strong>모범 답변:</strong> "그것이 바로 저희가 <strong>3중 합성치사(G12R + EP300 결손대응 CBP분해 + SMAD4 결손대응 PARP억제)</strong> 플랫폼을 개발한 이유입니다. 3가지 독립적인 생존 경로를 동시 차단하여 시너지 지수(CI) 0.24를 달성하므로 내성 발생 가능성을 원천 차단합니다."
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SLIDE 13: 30-Day Execution Roadmap
+         ========================================== -->
+    <div class="slide fade-in flex-col justify-center space-y-6" data-module="MODULE 6" data-title="30일 실행 로드맵">
+      <div class="border-b border-slate-800 pb-3">
+        <span class="text-emerald-400 text-xs font-bold uppercase tracking-wider">Action Plan</span>
+        <h3 class="text-2xl md:text-3xl font-black text-white mt-1">오늘부터 시작하는 30일 창업 실행 플랜</h3>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="text-blue-400 font-bold font-mono">WEEK 1</div>
+          <h4 class="font-bold text-white text-sm">지식 체화 & 플랫폼 숙지</h4>
+          <p class="text-slate-400 leading-relaxed">
+            • 본 슬라이드 및 index.html 대시보드 완전 숙지<br>
+            • IC50, Kd, CI 지표 및 5대 저해 기전 암기<br>
+            • Nature 2023 논문 초록 정독
+          </p>
+        </div>
+
+        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="text-indigo-400 font-bold font-mono">WEEK 2</div>
+          <h4 class="font-bold text-white text-sm">타깃 실사 리포트 제작</h4>
+          <p class="text-slate-400 leading-relaxed">
+            • index.html의 '리포트 인쇄/PDF'로 첫 번째 샘플 Dossier 발행<br>
+            • 링크드인/이메일로 바이오 VC 심사역 및 중소 제약사 BD 10곳 접촉
+          </p>
+        </div>
+
+        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="text-amber-400 font-bold font-mono">WEEK 3</div>
+          <h4 class="font-bold text-white text-sm">물질특허(IP) 명세서</h4>
+          <p class="text-slate-400 leading-relaxed">
+            • α,β-케토아마이드 유도체 5종 분자식 확정<br>
+            • 바이오 전문 변리사 미팅 및 선행기술조사<br>
+            • 가출원(비용 약 100만~200만 원) 진행
+          </p>
+        </div>
+
+        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="text-emerald-400 font-bold font-mono">WEEK 4</div>
+          <h4 class="font-bold text-white text-sm">CRO 견적 & TIPS 지원</h4>
+          <p class="text-slate-400 leading-relaxed">
+            • WuXi AppTec에 IC50 인비트로 시험 견적서 요청<br>
+            • 중기부 TIPS(팁스) 또는 예비창업패키지 사업계획서 제출 (지원금 1억~5억 확보)
+          </p>
+        </div>
+      </div>
+
+      <div class="bg-gradient-to-r from-blue-900/40 via-indigo-900/40 to-emerald-900/40 border border-slate-700/60 p-4 rounded-xl flex items-center justify-between">
+        <div>
+          <h4 class="text-sm font-bold text-white">축하합니다! 학습을 모두 완료하셨습니다.</h4>
+          <p class="text-xs text-slate-300 mt-0.5">이제 OncoTarget AI 플랫폼으로 실제 신약 타깃 발굴을 시작하십시오.</p>
+        </div>
+        <a href="index.html" target="_blank" class="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs shadow-md shadow-emerald-500/20 transition-all">
+          대시보드로 이동하기 →
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom Navigation Bar -->
+  <footer class="border-t border-slate-800 bg-slate-900/90 backdrop-blur px-6 py-3.5 flex items-center justify-between z-50">
+    <div class="flex items-center gap-2 text-xs text-slate-400">
+      <span>단축키:</span>
+      <kbd class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">← 이전</kbd>
+      <kbd class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">→ / Space 다음</kbd>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="flex items-center gap-2">
+      <button onclick="prevSlide()" id="btn-prev" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium text-xs transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+        ← 이전 슬라이드
+      </button>
+      <button onclick="nextSlide()" id="btn-next" class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md shadow-blue-600/30 transition-all">
+        다음 슬라이드 →
+      </button>
+    </div>
+  </footer>
+
+  <!-- Table of Contents Modal -->
+  <div id="toc-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="font-bold text-white text-base">슬라이드 전체 목차 (Curriculum)</h3>
+        <button onclick="toggleToc()" class="text-slate-400 hover:text-white text-sm">✕</button>
+      </div>
+
+      <div class="max-h-96 overflow-y-auto space-y-1.5 text-xs" id="toc-list">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentIdx = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    document.getElementById('total-slides').textContent = totalSlides;
+
+    function updateSlide() {
+      slides.forEach((s, idx) => {
+        s.classList.remove('active');
+        if (idx === currentIdx) {
+          s.classList.add('active');
+          document.getElementById('current-slide').textContent = idx + 1;
+          document.getElementById('module-tag').textContent = s.getAttribute('data-module');
+          document.getElementById('slide-title-header').textContent = s.getAttribute('data-title');
+        }
+      });
+
+      // Update progress bar
+      const progress = ((currentIdx + 1) / totalSlides) * 100;
+      document.getElementById('progress-bar').style.width = progress + '%';
+
+      // Update buttons
+      document.getElementById('btn-prev').disabled = (currentIdx === 0);
+      if (currentIdx === totalSlides - 1) {
+        document.getElementById('btn-next').textContent = "대시보드 시작하기 🚀";
+      } else {
+        document.getElementById('btn-next').textContent = "다음 슬라이드 →";
+      }
+    }
+
+    function nextSlide() {
+      if (currentIdx < totalSlides - 1) {
+        currentIdx++;
+        updateSlide();
+      } else {
+        window.location.href = "index.html";
+      }
+    }
+
+    function prevSlide() {
+      if (currentIdx > 0) {
+        currentIdx--;
+        updateSlide();
+      }
+    }
+
+    function goToSlide(idx) {
+      currentIdx = idx;
+      updateSlide();
+      toggleToc();
+    }
+
+    function toggleToc() {
+      const modal = document.getElementById('toc-modal');
+      modal.classList.toggle('hidden');
+    }
+
+    // Build TOC
+    const tocList = document.getElementById('toc-list');
+    slides.forEach((s, idx) => {
+      const item = document.createElement('div');
+      item.className = "flex items-center justify-between p-2 rounded-lg hover:bg-slate-800 cursor-pointer text-slate-300 hover:text-white transition-colors";
+      item.innerHTML = `
+        <div class="flex items-center gap-2">
+          <span class="font-mono text-slate-500 text-[11px] w-6">${idx + 1}.</span>
+          <span class="font-semibold">${s.getAttribute('data-title')}</span>
+        </div>
+        <span class="text-[10px] text-blue-400 font-mono">${s.getAttribute('data-module')}</span>
+      `;
+      item.onclick = () => goToSlide(idx);
+      tocList.appendChild(item);
+    });
+
+    // Keyboard navigation
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        prevSlide();
+      } else if (e.key === 'Escape') {
+        document.getElementById('toc-modal').classList.add('hidden');
+      }
+    });
+
+    updateSlide();
+  </script>
+</body>
+</html>
