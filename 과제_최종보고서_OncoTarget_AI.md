@@ -8,7 +8,8 @@
 
 ### 1. 제목 : Google DeepMind Science Skills & Stitch MCP 기반 1인 AI 버추얼 바이오텍 췌장암 정밀 신약 발굴 플랫폼 (OncoTarget AI)
 
-* **Site** : https://mslee1004-cell.github.io/202610_homework_1/
+* **Site** : https://khwan08.github.io/202610_homework_1/
+* **GitHub Repository** : https://github.com/khwan08/202610_homework_1
 * **로컬 실행 링크** :
   * [메인 대시보드 (`index.html`)](file:///c:/Users/Khwan/Desktop/학교과제/index.html)
   * [학습 및 발표용 슬라이드 (`slides.html`)](file:///c:/Users/Khwan/Desktop/학교과제/slides.html)
@@ -82,7 +83,7 @@
 * **개념** : 자본 집약적인 대규모 실험실(Wet-lab) 구축 비용 0원. **계산(In Silico)은 AI와 독점하고, 실제 시험(In Vitro/In Vivo)은 글로벌 공인 CRO(WuXi AppTec, Charles River)에 외주**를 주는 가상 바이오텍 모델.
 * **듀얼 엔진 수익화 전략** :
   * **[엔진 1] 즉시 현금 흐름 (Cashflow)** : 바이오 전문 VC 및 제약사에 AI 자동 생성 타깃 실사 리포트(Dossier) 판매 (**건당 $3,000 ~ $5,000**, 월 2,000만~3,000만 원 순이익 창출).
-  * **[엔진 2] 유니콘 자산화 (Asset)** : α,β-케토아마이드 물질특허(Composition of Matter) 선점 $\to$ CRO 세포 검증 $\to$ FDA 희귀의약품(ODD) 지정을 통한 7년 시장 독점권 획득 $\to$ 글로벌 빅파마에 조기 기술이전(**계약규모 5,000억 원+, 선급금 Upfront 300억 원**).
+  * **[엔진 2] 유니콘 자산화 (Asset)** : α,β-케토아마이드 물질특허(Composition of Matter) 선점 $\to$ CRO 세포 검증 $\to$ FDA 희귀의약품(ODD) 지정을 통한 7년 독점권 획득 $\to$ 글로벌 빅파마에 조기 기술이전(**계약규모 5,000억 원+, 선급금 Upfront 300억 원**).
 
 ---
 
